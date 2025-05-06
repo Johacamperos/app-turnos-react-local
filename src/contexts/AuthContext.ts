@@ -1,19 +1,25 @@
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { jwtDecode } from 'jwt-decode';
 import AuthService from "../api/AuthService";
-import ApiService from "@/api/ApiService";
+
 
 // Define user type
 export interface User {
   id: string;
   name: string;
-  counter: string;
-  advisorId: string;
+  advisor: Advisor | null;
   userId: string;
   email: string;
   role: "user" | "admin";
   authProvider?: "email" | "google" | "azure";
+}
+
+export interface Advisor {
+  advisorId: string;
+  advisorName: string;
+  counter: string;
+  userId: string;
 }
 
 // Define authentication state
@@ -44,10 +50,11 @@ export const login = createAsyncThunk(
     try {
       const response = await AuthService.login(email, password);    
       localStorage.setItem("auth_token", response.token);
-      const user = await ApiService.me();  
-      console.log(user);
-              
-      localStorage.setItem("user", JSON.stringify(user.data)); // Store user data in local storage
+       // Decode the token to get user information
+       const decoded: any = jwtDecode(response.token);
+      console.log(decoded);
+      
+      localStorage.setItem("user", JSON.stringify(decoded));
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message || "Login failed");

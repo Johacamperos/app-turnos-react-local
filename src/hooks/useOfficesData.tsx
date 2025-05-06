@@ -24,7 +24,7 @@ export const useOfficesData = () => {
 
   // Create office mutation
   const createOfficeMutation = useMutation({
-    mutationFn: (newOffice: Office) => ApiService.createOffice(newOffice),
+    mutationFn: (newOffice: Office) => ApiService.createAdminOffice(newOffice),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['offices'] });
       toast({
@@ -44,7 +44,7 @@ export const useOfficesData = () => {
   // Update office mutation
   const updateOfficeMutation = useMutation({
     mutationFn: ({ id, office }: { id: string, office: Office }) => 
-      ApiService.updateOffice(id, office),
+      ApiService.updateAdminOffice(id, office),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['offices'] });
       toast({
@@ -63,7 +63,7 @@ export const useOfficesData = () => {
 
   // Delete office mutation
   const deleteOfficeMutation = useMutation({
-    mutationFn: (id: string) => ApiService.deleteOffice(id),
+    mutationFn: (id: string) => ApiService.deleteAdminOffice(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['offices'] });
       toast({
@@ -83,8 +83,7 @@ export const useOfficesData = () => {
 
   // Filter offices based on search term
   const filteredOffices = offices.filter(office => 
-    office.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (office.deviceCode && office.deviceCode.toLowerCase().includes(searchTerm.toLowerCase()))
+    office.name.toLowerCase().includes(searchTerm.toLowerCase()) 
   );
 
   const maxPage = Math.ceil(filteredOffices.length / itemsPerPage);

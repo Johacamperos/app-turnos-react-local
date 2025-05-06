@@ -37,12 +37,7 @@ const OfficeDetailsDialog: React.FC<OfficeDetailsDialogProps> = ({
             <Building2 className="h-8 w-8 mr-3 text-primary" />
             <div>
               <h3 className="text-lg font-medium">{currentOffice.name}</h3>
-              <p className="text-sm text-muted-foreground">
-                {currentOffice.deviceCode 
-                  ? `Código de Dispositivo: ${currentOffice.deviceCode}` 
-                  : "Sin código de dispositivo asignado"
-                }
-              </p>
+             
             </div>
           </div>
 

@@ -54,7 +54,7 @@ const AdvisorConsole = () => {
   useEffect(() => {
     // Find client assigned to this advisor
     if (waitingQueue && user && waitingQueue.length > 0) {
-      const index = waitingQueue.findIndex(client => client.advisorId === user.advisorId);
+      const index = waitingQueue.findIndex(client => client.advisorId === user.advisor.advisorId);
       if (index !== -1) {
         const client = waitingQueue[index];
         setCurrentClient(client);
@@ -298,10 +298,10 @@ const AdvisorConsole = () => {
 
               {user != null && (
                 <div className="flex flex-col">
-                  <h2 className="text-xl font-display font-medium">{user.name}</h2>
+                  <h2 className="text-xl font-display font-medium">{user.advisor.advisorName}</h2>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <UserCheck className="h-4 w-4 mr-1" />
-                    Mesa {user.counter || 'N/A'} {/* Handle possible missing counter */}
+                    Mesa {user.advisor.counter || 'N/A'} {/* Handle possible missing counter */}
                   </div>
                 </div>
               )}

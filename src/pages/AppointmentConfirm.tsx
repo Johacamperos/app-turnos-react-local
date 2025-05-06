@@ -85,7 +85,7 @@ const AppointmentConfirm = () => {
   return (
     <main className="min-h-screen px-[20px] py-[80px] md:py-[90px] lg:py-[100px] bg-[#EFECEC] flex flex-col relative">
       <div className="relative h-full w-full max-w-[1200px] mx-auto">
-        <NavLink to={"/"} className="flex items-center absolute right-0 -top-[40px] md:right-[104px] font-medium text-sm text-muted-foreground gap-[6px] hover:underline">
+        <NavLink to={"/appointments"} className="flex items-center absolute right-0 -top-[40px] md:right-[104px] font-medium text-sm text-muted-foreground gap-[6px] hover:underline">
           Salir del formulario
           <X size={18}/>
         </NavLink>

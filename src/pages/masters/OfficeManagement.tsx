@@ -35,7 +35,6 @@ const OfficeManagement = () => {
   const [selectedZoneIds, setSelectedZoneIds] = useState<string[]>([]);
   const [formData, setFormData] = useState<Office>({
     name: "",
-    deviceCode: "",
     data: {}
   });
 
@@ -131,8 +130,7 @@ const OfficeManagement = () => {
 
   const resetForm = () => {
     setFormData({
-      name: "",
-      deviceCode: "",
+      name: "", 
       data: {}
     });
     setCurrentOffice(null);

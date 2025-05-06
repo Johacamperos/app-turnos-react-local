@@ -104,6 +104,7 @@ const Appointments = () => {
   };
 
   const handleCloseWalkIn = () => {
+    setCurrentStep(1);
     setShowWalkIn(false);
   };
 

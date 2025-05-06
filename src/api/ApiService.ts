@@ -13,7 +13,6 @@ export interface Customer {
 export interface Office {
   id?: string;
   name: string;
-  deviceCode?: string;
   data: {
     maxAppointments?: number;
     address?: string;
@@ -80,10 +79,15 @@ export default class ApiService {
   static BASE_URL = "https://legger-workflows-app-develop.azurewebsites.net/webhook"; // Reemplaza con tu API Gateway
 
   private static LOCAL_STORAGE_KEY = "turnopolis-settings";
-  private static SETTINGS_ENDPOINT = "/settings";
-  private static REQUEST_TIMEOUT = 8000; // 8 segundos de timeout
+  private static REQUEST_TIMEOUT = 60000; // 60 segundos de timeout
+  
+  
+  // Admin endpoints
+  private static ADMIN_OFFICES_ENDPOINT = "/admin/offices";
+
 
   // Masters endpoints
+  private static SETTINGS_ENDPOINT = "/settings";
   private static CUSTOMERS_ENDPOINT = "/customers";
   private static OFFICES_ENDPOINT = "/offices";
 
@@ -363,72 +367,7 @@ export default class ApiService {
     }
   }
 
-  // Obtener todas las zonas de una oficina
-  static async fetchOfficesZones(id: string): Promise<ZoneOfficeInfo> {
-      return await this.request<ZoneOfficeInfo>(`${this.OFFICES_ZONAS_ENDPOINT}?id=${id}`);
-  }
-
-  // Obtener una oficina específica
-  static async fetchOffice(id: number): Promise<Office | null> {
-    try {
-      return await this.request<Office>(`${this.OFFICES_ENDPOINT}/${id}`);
-    } catch (error) {
-      console.error(`Error fetching office ${id}:`, error);
-      return null;
-    }
-  }
-
-  // Crear una nueva oficina
-  static async createOffice(office: Office): Promise<Office> {
-    return await this.request<Office>(this.OFFICES_ENDPOINT, {
-      method: "POST",
-      body: JSON.stringify(office),
-    });
-  }
-
-  // Actualizar una oficina existente
-  static async updateOffice(id: string, office: Office): Promise<Office> {
-    return await this.request<Office>(`${this.OFFICES_ENDPOINT}`, {
-      method: "PUT",
-      body: JSON.stringify(office),
-    });
-  }
-
-  // Actualizar la disponibilidad de una oficina
-  static async updateOfficeAvailability(id: string,
-    office: Office): Promise<Office> {
-    office.id = id;
-    return await this.request<Office>(`${this.OFFICES_AVAILABILITY_ENDPOINT}`, {
-      method: "PUT",
-      body: JSON.stringify(office),
-    });
-  }
-
-  // Actualizar oficinas devices
-  static async updateOfficeDevices(id: string, devices: string[]): Promise<Office> {
-    const office = await this.fetchOffice(parseInt(id));
-    if (!office) {
-      throw new Error(`Office with ID ${id} not found`);
-    }
-
-    if (!office.data) {
-      office.data = {};
-    }
-
-    office.data.devices = devices;
-
-    return await this.request<Office>(`${this.OFFICES_ENDPOINT}/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(office),
-    });
-  }
-
-  // Eliminar una oficina
-  static async deleteOffice(id: string): Promise<void> {
-    await this.request<void>(`${this.OFFICES_ENDPOINT}/${id}`, {
-      method: "DELETE",
-    });
-  }
+ 
 
   // ========== MÉTODOS PARA ZONAS ==========
 
@@ -672,6 +611,86 @@ static async login(email:string, password:string): Promise<{ access_token: strin
 static async me(): Promise<{ data: User }> {
   return await this.request<{ data: User }>(this.SECURITY_ME_ENDPOINT);
 }
+
+
+ // ========== MÉTODOS PARA ADMIN OFICINAS ==========
+
+  // Obtener todas las oficinas
+  static async fetchAdminOffices(): Promise<Office[]> {
+    try {
+      return await this.request<Office[]>(this.ADMIN_OFFICES_ENDPOINT);
+    } catch (error) {
+      console.error("Error fetching offices:", error);
+      return [];
+    }
+  }
+
+  // Obtener todas las zonas de una oficina
+  static async fetchAdminOfficesZones(id: string): Promise<ZoneOfficeInfo> {
+      return await this.request<ZoneOfficeInfo>(`${this.OFFICES_ZONAS_ENDPOINT}?id=${id}`);
+  }
+
+  // Obtener una oficina específica
+  static async fetchAdminOffice(id: number): Promise<Office | null> {
+    try {
+      return await this.request<Office>(`${this.ADMIN_OFFICES_ENDPOINT}/${id}`);
+    } catch (error) {
+      console.error(`Error fetching office ${id}:`, error);
+      return null;
+    }
+  }
+
+  // Crear una nueva oficina
+  static async createAdminOffice(office: Office): Promise<Office> {
+    return await this.request<Office>(this.ADMIN_OFFICES_ENDPOINT, {
+      method: "PUT",
+      body: JSON.stringify(office),
+    });
+  }
+
+  // Actualizar una oficina existente
+  static async updateAdminOffice(id: string, office: Office): Promise<Office> {
+    return await this.request<Office>(`${this.ADMIN_OFFICES_ENDPOINT}`, {
+      method: "PUT",
+      body: JSON.stringify(office),
+    });
+  }
+
+  // Actualizar la disponibilidad de una oficina
+  static async updateAdminOfficeAvailability(id: string,
+    office: Office): Promise<Office> {
+    office.id = id;
+    return await this.request<Office>(`${this.OFFICES_AVAILABILITY_ENDPOINT}`, {
+      method: "PUT",
+      body: JSON.stringify(office),
+    });
+  }
+
+  // Actualizar oficinas devices
+  static async updateAdminOfficeDevices(id: string, devices: string[]): Promise<Office> {
+    const office = await this.fetchAdminOffice(parseInt(id));
+    if (!office) {
+      throw new Error(`Office with ID ${id} not found`);
+    }
+
+    if (!office.data) {
+      office.data = {};
+    }
+
+    office.data.devices = devices;
+
+    return await this.request<Office>(`${this.ADMIN_OFFICES_ENDPOINT}/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(office),
+    });
+  }
+
+  // Eliminar una oficina
+  static async deleteAdminOffice(id: string): Promise<void> {
+    await this.request<void>(`${this.OFFICES_ENDPOINT}/${id}`, {
+      method: "DELETE",
+    });
+  }
 
 
 

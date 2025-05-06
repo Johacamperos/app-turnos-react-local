@@ -26,7 +26,7 @@ const Turnero = () => {
   useEffect(() => {
     if (!deviceId) return;
 
-    const url = `https://3000-idx-turnos-api-1745523020988.cluster-2xid2zxbenc4ixa74rpk7q7fyk.cloudworkstations.dev/v1.0/stream/${deviceId}`;
+    const url = `https://app-turnos-realtime-api-develop.azurewebsites.net/v1.0/stream/${deviceId}`;
     const eventSource = new EventSource(url);
 
     eventSource.onmessage = (event) => {

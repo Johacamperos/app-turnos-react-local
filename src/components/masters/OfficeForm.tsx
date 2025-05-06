@@ -39,19 +39,7 @@ const OfficeForm: React.FC<OfficeFormProps> = ({
             required
           />
         </div>
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="deviceCode" className="text-right">
-            Código de Dispositivo
-          </Label>
-          <Input
-            id="deviceCode"
-            name="deviceCode"
-            value={formData.deviceCode || ""}
-            onChange={onInputChange}
-            className="col-span-3"
-            placeholder="Opcional"
-          />
-        </div>
+        
       </div>
       <DialogFooter>
         <Button type="submit" disabled={isPending}>
